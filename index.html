@@ -1,0 +1,177 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>reveal.js</title>
+
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/black.css">
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/monokai.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section>
+				<h2><span class="fragment highlight-current-blue">Singleton</span> Pattern</h2>
+				<ul>
+					<li><span class="fragment highlight-red">What</span> is Singleton Pattern?</li>
+					<li><span class="fragment highlight-blue">How</span> to implement it?</li>
+					<li><span class="fragment highlight-green">Why</span> and <span
+							class="fragment highlight-green">when</span> should we use this pattern?</li>
+				</ul>
+			</section>
+			<section>
+				<h2>What is Singleton Pattern?</h2>
+				<section>
+					<ul>
+						<li class="fragment fade-up">Ensure a class can have <span class="fragment highlight-red">only
+								one instance</span></li>
+						<li class="fragment fade-up"><span class="fragment highlight-green">one and only
+								one</span>
+							<span class="fragment highlight-blue">Provide global access point</span> to
+							this instance</li>
+						<li class="fragment fade-in-then-out">
+							<img src="emperor.jpg" alt="emperor" style="width: 100vw; height: 33vh;">
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section>
+				<h2>How to implement it?</h2>
+				<section>
+					<pre>
+<code class="hljs javascript" data-line-numbers="5, 7-12">var Singleton = function( name ) {
+	this.name = name;
+}
+
+Singleton.instance = null; 
+
+Singleton.getInstance = function( name ) {
+	if ( !this.instance ) {
+		this.instance = new Singleton( name );
+	}
+	return this.instance;
+}
+					</code></pre>
+				</section>
+				<section>
+					<pre>
+<code class="hljs javascript" data-line-numbers="1-4">var a = Singleton.getInstance('sven1');
+var b = Singleton.getInstance('sven2');
+
+alert( a === b ); // true
+</code></pre>
+				</section>
+			</section>
+			<section>
+				<h2><span class="fragment highlight-current-blue">Lazy instantiation</span></h2>
+
+				<ul>
+					<li>when <span class="fragment highlight-blue">needed</span></li>
+					<li>when <span class="fragment highlight-blue">call</span>
+						<pre><code class="hljs javascript">Singleton.getInstance()</code></pre>
+					</li>
+					<li><span class="fragment highlight-red">NOT</span> when page loaded</li>
+				</ul>
+				<p class="fragment highlight-green grow">Very important!</p>
+				<pre>
+<code class="hljs javascript" data-line-numbers="1-12">Singleton.getInstance = (function() {
+	var _instance = null;
+	return function( name ) {
+		if ( !_instance ) {
+			_instance = new Singleton( name );
+		}
+		return _instance;
+	}
+})();
+</code></pre>
+			</section>
+			<section>
+				<h2><span class="fragment highlight-current-blue">Single Principle Responsibility</span></h2>
+				<p class="fragment highlight-green grow">Only one reason can make it change.</p>
+				<p>If there are <span class="fragment highlight-blue">two</span>, it has <span
+						class="fragment highlight-blue">two</span> responsibilites.</p>
+				<p class="fragment highlight-red grow">One object (function) can do only one thing.</p>
+				<pre>
+<code class="hljs javascript" data-line-numbers="1-12">Singleton.getInstance = (function() {
+	var _instance = null;
+	return function( name ) {
+		if ( !_instance ) {
+			_instance = new Singleton( name );
+		}
+		return _instance;
+	}
+})();
+</code></pre>
+				<pre>
+<code class="hljs javascript" data-line-numbers="1-12">Singleton.getInstance = (function() {
+	var _instance = null;
+	return function( name ) {
+		if ( !_instance ) {
+			_instance = new Singleton( name );
+		}
+		return _instance;
+	}
+})();
+</code></pre>
+			</section>
+			<section>
+				<h2>Example: Emperor</h2>
+				<pre style="height: 60vh; width:60vw;">
+<code class="hljs javascript" data-line-numbers="1-25" style="font-size: 16px;"> var createCrown = function() {
+	var _crown = { owner : "Napoleon" }
+	return crown; 	
+}
+
+var createEmperor = function(fn) {
+	var result;
+	return function() {
+		return result || ( result = fn.apply(this, arguments) );
+	}
+}
+
+var takeTheThrone = createEmperor( createCrown );
+	
+document.getElementById('take_the_throne').onclick = function() {
+	var newEmperor= takeTheThrone();
+	newEmperor.style.display = 'block';
+}
+</code></pre>
+			</section>
+		</div>
+	</div>
+
+	<script src="js/reveal.js"></script>
+
+	<script>
+		// More info about config & dependencies:
+		// - https://github.com/hakimel/reveal.js#configuration
+		// - https://github.com/hakimel/reveal.js#dependencies
+		Reveal.initialize({
+			dependencies: [
+				{ src: 'plugin/markdown/marked.js' },
+				{ src: 'plugin/markdown/markdown.js' },
+				{ src: 'plugin/notes/notes.js', async: true },
+				{ src: 'plugin/highlight/highlight.js', async: true }
+			]
+		});
+	</script>
+</body>
+
+</html>
